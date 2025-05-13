@@ -7,7 +7,12 @@ type UserStatusType = {
 }
 
 type Actions = {
-    type: 'login'|'logout'
+    type: 'login'
+    payload: {
+        email: string
+    }
+} | {
+    type: 'logout'
 }
 
 const initialState: UserStatusType = {
@@ -40,7 +45,9 @@ const Login = () => {
     <section>
       <h1>Login</h1>
       <pre>{JSON.stringify(state, null, 2)}</pre>
-      <button onClick={() => dispatch({ type: 'login' })}>Connect</button>
+      <button onClick={() => dispatch({ type: 'login', payload: {
+        email: 'user@email.com' }
+      })}>Connect</button>
       <button>Logout</button>
     </section>
   );
