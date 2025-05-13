@@ -1,24 +1,46 @@
-import { useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useMutation } from '@tanstack/react-query';
+
+const schema = z
+  .object({
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(6)
+      .max(100)
+      .regex(/^(?=.*[a-z]).*$/)
+      .regex(/^(?=.*[A-Z]).*$/)
+      .regex(/^(?=.*[@$!%*?&]).*$/),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
+
+type Inputs = z.infer<typeof schema>;
 
 const Register = () => {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
-  const onSubmitHandler = (e: React.FormEvent) => {
-    e.preventDefault();
-    const email = emailRef.current as HTMLInputElement;
-    const password = passwordRef.current;
-    const confirmPassword = confirmPasswordRef.current as HTMLInputElement;
-    console.log(email.value);
-    console.log(password!.value);
-    console.log(confirmPassword.value);
+  useMutation({
+    mutationFn: () => {},
+  })
+
+  const onSubmitHandler = (data: Inputs) => {
+    console.log(data.email);
+    console.log(data.password);
+    console.log(data.confirmPassword);
   };
 
   return (
     <section>
       <h1>Register</h1>
-      <form onSubmit={onSubmitHandler}>
+      <form onSubmit={handleSubmit(onSubmitHandler)}>
         <fieldset>
           <label htmlFor='email'>Email:</label>
           <input
@@ -26,8 +48,9 @@ const Register = () => {
             type='email'
             id='email'
             placeholder='Email'
-            ref={emailRef}
+            {...register('email')}
           />
+          {errors.email && <p>{errors.email.message}</p>}
         </fieldset>
 
         <fieldset>
@@ -37,8 +60,9 @@ const Register = () => {
             type='password'
             id='password'
             placeholder='Password'
-            ref={passwordRef}
+            {...register('password')}
           />
+          {errors.password && <p>{errors.password.message}</p>}
         </fieldset>
 
         <fieldset>
@@ -48,8 +72,9 @@ const Register = () => {
             type='password'
             id='confirmPassword'
             placeholder='Confirm Password'
-            ref={confirmPasswordRef}
+            {...register('confirmPassword')}
           />
+          {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
         </fieldset>
 
         <button type='submit'>Register</button>
