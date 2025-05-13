@@ -19,20 +19,19 @@ const HeroesList = () => {
 
   return (
     <section>
-      <h1>List of heroes</h1>
-      <ul>
+      <h1 className='text-center'>List of heroes</h1>
+      <ul className='flex justify-center gap-2 my-6'>
         {alphabet.map((letter) => (
           <li
             key={letter}
-            style={selectedLetter === letter ? { color: 'red' } : undefined}
+            className={`cursur-pointer font-semibold ${selectedLetter === letter && 'text-red-500'}`}
             onClick={() => onSelectLetter(letter)}
           >
             {letter}
           </li>
         ))}
       </ul>
-      <div>
-        <h2>Results</h2>
+      <div className='flex flex-wrap, justify-center gap-4'>
         {isFetching && <p>Loading...</p>}
         {!isFetching && (
           <ul>
