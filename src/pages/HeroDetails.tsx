@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router';
 import { getHeroById } from '../api/heroes';
 import HeroCard from '../components/HeroCard';
+import HeroSkeletonCard from '../components/skeletons/HeroCardSkeleton';
 
 const HeroDetails = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const HeroDetails = () => {
     <section>
       <h1>HeroDetails - ID: {id}</h1>
       {isFetching && 'Fetching...'}
-      {isLoading && 'Loading...'}
+      {isLoading && <HeroSkeletonCard />}
       {isError && <p>Error while fetching Hero #{id}</p>}
       {isSuccess && data && <HeroCard hero={data} /> }
       <button onClick={() => navigate(-1)}>Previous</button>

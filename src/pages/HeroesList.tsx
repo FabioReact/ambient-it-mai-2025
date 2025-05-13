@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useGetHeroesByFirstLetter } from '../hooks/useGetHeroesByFirstLetter';
 import HeroCard from '../components/HeroCard';
 import { Link } from 'react-router';
+import HeroSkeletonCard from '../components/skeletons/HeroCardSkeleton';
 
 const alphabet: string[] = [];
 
@@ -34,7 +35,7 @@ const HeroesList = () => {
         ))}
       </ul>
       <div className='flex flex-wrap justify-center gap-4'>
-        {isFetching && <p>Loading...</p>}
+        {isFetching && Array.from({ length: 10 }).map((_, index) => <HeroSkeletonCard key={index} />)}
         {!isFetching && (
           heroes.map((hero) => (
             <Link key={hero.id} to={hero.id.toString()}>
