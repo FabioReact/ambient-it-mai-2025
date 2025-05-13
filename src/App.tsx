@@ -1,20 +1,17 @@
-import Counter from './components/Counter';
-import { useCounter } from './hooks/useCounter';
-import HeroesList from './pages/HeroesList';
+import { BrowserRouter } from 'react-router';
+import AppRoutes from './AppRoutes';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
-  // const { counter, increment } = useCounter()
   return (
-    <>
-      <h1>Vite + React</h1>
-      {/* <p>Compteur: {counter}</p>
-      <button onClick={increment}>Increment</button>
-      <Counter /> */}
-      <HeroesList />
-    </>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
 export default App;
-
-// atoms, molecules, organisms

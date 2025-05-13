@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useGetHeroesByFirstLetter } from '../hooks/useGetHeroesByFirstLetter';
+import HeroCard from '../components/HeroCard';
+import { Link } from 'react-router';
 
 const alphabet: string[] = [];
 
@@ -24,21 +26,21 @@ const HeroesList = () => {
         {alphabet.map((letter) => (
           <li
             key={letter}
-            className={`cursur-pointer font-semibold ${selectedLetter === letter && 'text-red-500'}`}
+            className={`cursor-pointer font-semibold ${selectedLetter === letter && 'text-red-500'}`}
             onClick={() => onSelectLetter(letter)}
           >
             {letter}
           </li>
         ))}
       </ul>
-      <div className='flex flex-wrap, justify-center gap-4'>
+      <div className='flex flex-wrap justify-center gap-4'>
         {isFetching && <p>Loading...</p>}
         {!isFetching && (
-          <ul>
-            {heroes.map((hero) => (
-              <li key={hero.id}>{hero.name}</li>
-            ))}
-          </ul>
+          heroes.map((hero) => (
+            <Link key={hero.id} to={hero.id.toString()}>
+              <HeroCard hero={hero} />
+            </Link>
+          ))
         )}
       </div>
     </section>
