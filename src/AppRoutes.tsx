@@ -6,6 +6,7 @@ import HeroDetails from './pages/HeroDetails';
 import LearnUseEffect from './pages/LearnUseEffect';
 import Counter from './components/Counter';
 import Login from './pages/Login';
+import Register from './pages/Register/Register';
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
         <Route path='/useEffect' element={<LearnUseEffect />} />
         <Route path='/counter' element={<Counter />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
       </Route>
     </Routes>
   );
