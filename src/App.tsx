@@ -1,14 +1,14 @@
 import { BrowserRouter } from 'react-router';
 import AppRoutes from './AppRoutes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import FavoritesContext from './contexts/favorites-context';
 import { CounterContextProvider } from './providers/CounterContextProvider';
+import FavoritesContextProvider from './providers/FavoritesContextProvider';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <FavoritesContext.Provider value={{ favorites: ['243'] }}>
+    <FavoritesContextProvider>
       <CounterContextProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
@@ -16,7 +16,7 @@ function App() {
           </BrowserRouter>
         </QueryClientProvider>
       </CounterContextProvider>
-    </FavoritesContext.Provider>
+    </FavoritesContextProvider>
   );
 }
 

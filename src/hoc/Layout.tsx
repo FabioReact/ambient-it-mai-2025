@@ -6,7 +6,7 @@ const Layout = () => {
   return (
     <>
       <nav>
-        <ul>
+        <ul className='flex gap-4 justify-center'>
           <li>
             <NavLink to='/' className={getActiveClassNames}>Home</NavLink>
           </li>

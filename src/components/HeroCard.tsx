@@ -1,10 +1,14 @@
-import type { Hero } from "../types/hero";
+import { useFavoritesContext } from '../contexts/favorites-context';
+import type { Hero } from '../types/hero';
+import Star from './Star';
 
 type Props = {
   hero: Hero;
 };
 
 const HeroCard = ({ hero }: Props) => {
+  const { favorites, addFavorite, removeFavorite } = useFavoritesContext();
+  const isFav = favorites.includes(hero.id.toString());
   return (
     <div className='max-w-xs rounded overflow-hidden shadow-lg'>
       <div className='h-96 overflow-hidden relative'>
@@ -18,6 +22,11 @@ const HeroCard = ({ hero }: Props) => {
         <p className='font-bold text-xl'>
           {hero.name} <span className='text-gray-600 text-base'>#{hero.id}</span>
         </p>
+        <Star
+          filled={isFav}
+          onSelect={() => addFavorite(hero.id.toString())}
+          onUnSelect={() => removeFavorite(hero.id.toString())}
+        />
         <p className='text-lg mb-2'>{hero.biography['full-name']}</p>
         <p className='text-gray-700'>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa voluptas iste laboriosam
