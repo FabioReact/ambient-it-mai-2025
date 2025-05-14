@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "json-server db.json --port 4000 --delay 1000",
+    "serve": "json-server-auth db.json --port 4000 --delay 1000",
     "test": "vitest",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -38,6 +38,7 @@
     "globals": "^16.0.0",
     "jsdom": "^26.1.0",
     "json-server": "^0.17.4",
+    "json-server-auth": "^2.1.0",
     "path": "^0.12.7",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
