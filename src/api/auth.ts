@@ -13,10 +13,10 @@ class Fetcher {
   }
 }
 
-export const registerUser = async () => {
-  const response = await Fetcher.post('http://localhost:4000/register', {
-    email: 'user@email.com',
-    password: 'password',
+export const registerUser = async ({ email, password }: { email: string, password: string }) => {
+  const response = await axios.post('http://localhost:4000/register', {
+    email,
+    password,
   });
   return response;
 };

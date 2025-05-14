@@ -7,6 +7,7 @@ import LearnUseEffect from './pages/LearnUseEffect';
 import Counter from './components/Counter';
 import Login from './pages/Login';
 import Register from './pages/Register/Register';
+import Profile from './pages/Profile';
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
         <Route path='/counter' element={<Counter />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/profile' element={<Profile />} />
       </Route>
     </Routes>
   );

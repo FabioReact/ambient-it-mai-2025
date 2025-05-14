@@ -2,23 +2,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
+import { registerUser } from '../../api/auth';
+// import { useNavigate } from 'react-router';
+import { schema } from './schema';
 
-const schema = z
-  .object({
-    email: z.string().email(),
-    password: z
-      .string()
-      .min(6)
-      .max(100)
-      .regex(/^(?=.*[a-z]).*$/)
-      .regex(/^(?=.*[A-Z]).*$/)
-      .regex(/^(?=.*[@$!%*?&]).*$/),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  });
+// http://localhost:5173/heroes/4 -> Ajout aux favoris
+// http://localhost:5173/profile -> Voir les favoris
 
 type Inputs = z.infer<typeof schema>;
 
@@ -26,15 +15,26 @@ const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
+//   const navigate = useNavigate();
 
-  useMutation({
-    mutationFn: () => {},
+  const { mutate, isPending, error, isError, isSuccess } = useMutation({
+    mutationFn: registerUser,
+    onError: (error) => {
+        console.error(error);
+    },
+    onSuccess: () => {
+        console.log('Success')
+        // navigate('/');
+    },
   })
 
-  const onSubmitHandler = (data: Inputs) => {
-    console.log(data.email);
-    console.log(data.password);
-    console.log(data.confirmPassword);
+  const onSubmitHandler = async (data: Inputs) => {
+    console.log(data)
+    mutate({
+        email: data.email,
+        password: data.password
+    });
+    console.log('Over')
   };
 
   return (
@@ -57,7 +57,7 @@ const Register = () => {
           <label htmlFor='password'>Password:</label>
           <input
             className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-            type='password'
+            type='text'
             id='password'
             placeholder='Password'
             {...register('password')}
@@ -69,7 +69,7 @@ const Register = () => {
           <label htmlFor='confirmPassword'>Confirm Password:</label>
           <input
             className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-            type='password'
+            type='text'
             id='confirmPassword'
             placeholder='Confirm Password'
             {...register('confirmPassword')}
@@ -78,6 +78,9 @@ const Register = () => {
         </fieldset>
 
         <button type='submit'>Register</button>
+        {isError && <p className='text-red-600'>Error: {error.message}</p>}
+        {isPending && <p>Loading...</p>}
+        {isSuccess && <p className='text-green-600'>User created successfully</p>}
       </form>
     </section>
   );
