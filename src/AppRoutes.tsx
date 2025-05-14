@@ -8,6 +8,7 @@ import Counter from './components/Counter';
 import Login from './pages/Login';
 import Register from './pages/Register/Register';
 import Profile from './pages/Profile';
+import Battle from './pages/Battle';
 
 const AppRoutes = () => {
   return (
@@ -21,6 +22,7 @@ const AppRoutes = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/battle' element={<Battle />} />
       </Route>
     </Routes>
   );

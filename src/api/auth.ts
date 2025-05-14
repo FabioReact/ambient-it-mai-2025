@@ -14,11 +14,14 @@ class Fetcher {
 }
 
 export const registerUser = async ({ email, password }: { email: string, password: string }) => {
-  const response = await axios.post('http://localhost:4000/register', {
-    email,
-    password,
+  const response = await fetch('http://localhost:4000/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
   });
-  return response;
+  return (await response.json()) as { accessToken: string };
 };
 
 export const loginUser = async () => {

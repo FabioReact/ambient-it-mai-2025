@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
@@ -17,20 +17,21 @@ const Register = () => {
   });
 //   const navigate = useNavigate();
 
-  const { mutate, isPending, error, isError, isSuccess } = useMutation({
-    mutationFn: registerUser,
-    onError: (error) => {
-        console.error(error);
-    },
-    onSuccess: () => {
-        console.log('Success')
-        // navigate('/');
-    },
-  })
+const { isPending, isSuccess, isError, error, mutateAsync } = useMutation({
+  mutationFn: (params: { email: string; password: string }) =>
+    registerUser(params),
+  onSuccess: () => {
+    console.log('Account created !');
+    // navigate('/profile');
+  },
+  onError: () => {
+    console.log('Houston, we have a problem !');
+  },
+});
 
-  const onSubmitHandler = async (data: Inputs) => {
+  const onSubmitHandler: SubmitHandler<Inputs> = async (data: Inputs) => {
     console.log(data)
-    mutate({
+    mutateAsync({
         email: data.email,
         password: data.password
     });
@@ -77,7 +78,7 @@ const Register = () => {
           {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
         </fieldset>
 
-        <button type='submit'>Register</button>
+        <button>Register</button>
         {isError && <p className='text-red-600'>Error: {error.message}</p>}
         {isPending && <p>Loading...</p>}
         {isSuccess && <p className='text-green-600'>User created successfully</p>}
