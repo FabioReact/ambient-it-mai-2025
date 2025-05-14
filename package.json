@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "json-server-auth db.json --port 4000 --delay 1000",
+    "serve": "json-server-auth --watch db.json --port 4000 --delay 1000",
     "test": "vitest",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
