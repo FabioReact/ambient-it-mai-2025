@@ -4,12 +4,12 @@ import { RootState } from '../store';
 import { Hero } from '@/types/hero';
 
 type FightHistory = {
-    firstChallenger: Hero
-    secondChallenger: Hero
-    winner: number
-}
+  firstChallenger: Hero;
+  secondChallenger: Hero;
+  winner: number;
+};
 
-type FightHistoryState = FightHistory[]
+type FightHistoryState = FightHistory[];
 
 // Define the initial state using that type
 const initialState: FightHistoryState = [];
@@ -20,17 +20,18 @@ export const fightHistory = createSlice({
   initialState,
   reducers: {
     addToHistory: (state, action: PayloadAction<FightHistory>) => {
-        state.unshift(action.payload);
+      state.unshift(action.payload);
     },
     clearHistory: (state) => {
-        state = [];
-    }
+      console.log(state);
+      state = [];
+    },
   },
 });
 
-export const { addToHistory, clearHistory } = fightHistory.actions
+export const { addToHistory, clearHistory } = fightHistory.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectAuth = (state: RootState) => state.auth
+export const selectAuth = (state: RootState) => state.auth;
 
-export default fightHistory.reducer
+export default fightHistory.reducer;

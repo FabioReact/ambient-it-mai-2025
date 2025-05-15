@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), tsconfigPaths(),
     {
       name: 'ignore-specific-file-reload',
-      handleHotUpdate({ file, server }) {
+      handleHotUpdate({ file, server: _ }) {
         if (file.endsWith('db.json')) {
           // Prevent full page reload
           return [];
