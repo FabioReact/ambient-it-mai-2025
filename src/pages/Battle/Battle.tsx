@@ -5,11 +5,15 @@ import { fight } from '@/utils/fight';
 import HeroCard from '@/components/HeroCard';
 import SelectHero from './SelectHero';
 import Winner from './Winner';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { addToHistory } from '@/redux/slices/fightHistorySlice';
 
 const Battle = () => {
   const [firstHero, setFirstHero] = useState<Hero | null>(null);
   const [secondHero, setSecondHero] = useState<Hero | null>(null);
   const [winner, setWinner] = useState<Hero | null>(null);
+  const { connected} = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   return (
     <section>
       <h1>Battle</h1>
@@ -23,6 +27,9 @@ const Battle = () => {
               className='text-white bg-red-600 px-2 py-1 cursor-pointer h-10 rounded-full'
               onClick={() => {
                 const result = fight(firstHero, secondHero);
+                if (connected) {
+                  dispatch(addToHistory({ firstChallenger: firstHero, secondChallenger: secondHero, winner: result.id }));
+                }
                 setWinner(result);
               }}
             >
