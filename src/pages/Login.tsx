@@ -1,5 +1,7 @@
 import { login } from '@/api/auth';
 import { useAuthContext } from '@/contexts/auth-context';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { testLogin } from '@/redux/slices/authSlice';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
@@ -18,12 +20,14 @@ const Login = () => {
   const location = useLocation();
   const from = location.state?.from;
   const navigate = useNavigate();
-  const { loginUser } = useAuthContext();
+  const dispatch = useAppDispatch();
+  // const { loginUser } = useAuthContext();
 
   const { mutateAsync, isError, error, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      loginUser(data.accessToken, data.user);
+      // loginUser(data.accessToken, data.user);
+      dispatch(testLogin({ accessToken: data.accessToken, user: data.user }));
       navigate(from || '/', { replace: true });
     },
   });

@@ -4,15 +4,7 @@ import { useAuthContext } from '@/contexts/auth-context';
 
 const Profile = () => {
   const { favorites } = useFavoritesContext();
-  const { email, id, accessToken, connected } = useAuthContext();
-  if (!connected) {
-    return (
-      <section>
-        <h1>Profile</h1>
-        <p>Not connected</p>
-      </section>
-    );
-  }
+  const { email, id, accessToken } = useAuthContext();
   const { counter, decrement, increment } = useCounterContext();
   return (
     <section>
