@@ -1,14 +1,16 @@
-import { useFavoritesContext } from '../contexts/favorites-context';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import type { Hero } from '../types/hero';
 import Star from './Star';
+import { addFavorites, removeFavorites } from '@/redux/slices/favoritesSlice';
 
 type Props = {
   hero: Hero;
 };
 
 const HeroCard = ({ hero }: Props) => {
-  const { favorites, addFavorite, removeFavorite } = useFavoritesContext();
-  const isFav = favorites.includes(hero.id.toString());
+  const favorites = useAppSelector(state => state.favoriteHeroes);
+  const dispatch = useAppDispatch();
+  const isFav = favorites.includes(hero.id);
   return (
     <div className='max-w-xs rounded overflow-hidden shadow-lg'>
       <div className='h-96 overflow-hidden relative'>
@@ -24,8 +26,8 @@ const HeroCard = ({ hero }: Props) => {
         </p>
         <Star
           filled={isFav}
-          onSelect={() => addFavorite(hero.id.toString())}
-          onUnSelect={() => removeFavorite(hero.id.toString())}
+          onSelect={() => dispatch(addFavorites(hero.id))}
+          onUnSelect={() => dispatch(removeFavorites(hero.id))}
         />
         <p className='text-lg mb-2'>{hero.biography['full-name']}</p>
         <p className='text-gray-700'>

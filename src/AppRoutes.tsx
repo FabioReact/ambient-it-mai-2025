@@ -8,7 +8,7 @@ import Counter from './components/Counter';
 import Login from './pages/Login';
 import Register from './pages/Register/Register';
 import Profile from './pages/Profile';
-import Battle from './pages/Battle';
+import Battle from './pages/Battle/Battle';
 import PrivateRoute from './hoc/PrivateRoute';
 import Logout from './components/Logout';
 

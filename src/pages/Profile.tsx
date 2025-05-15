@@ -1,11 +1,8 @@
-import { useFavoritesContext } from '../contexts/favorites-context';
-import { useCounterContext } from '../contexts/counter-context';
 import { useAppSelector } from '@/redux/hooks';
 
 const Profile = () => {
-  const { favorites } = useFavoritesContext();
+  const favorites = useAppSelector(state => state.favoriteHeroes)
   const { accessToken, id, email } = useAppSelector(state => state.auth);
-  const { counter, decrement, increment } = useCounterContext();
   return (
     <section>
       <h1>Profile</h1>
@@ -21,21 +18,6 @@ const Profile = () => {
             <li key={favorite}>{favorite}</li>
           ))}
         </ul>
-        <p>Counter: {counter}</p>
-        <button
-          onClick={() => {
-            increment();
-          }}
-        >
-          Increment
-        </button>
-        <button
-          onClick={() => {
-            decrement();
-          }}
-        >
-          Decrement
-        </button>
       </div>
     </section>
   );

@@ -10,7 +10,10 @@ type StarProps = {
 
 const Star = ({ filled = false, color = 'gold', onSelect, onUnSelect }: StarProps) => {
   if (!filled) {
-    return <LucideStar color={color} onClick={onSelect} />;
+    return <LucideStar color={color} onClick={(e) => {
+      e.stopPropagation();
+      onSelect?.();
+    }} />;
   }
   return <LucideStar fill={color} color={color} onClick={onUnSelect} />;
 };
