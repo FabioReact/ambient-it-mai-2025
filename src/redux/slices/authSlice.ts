@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-// import type { RootState } from '../../app/store'
+import { RootState } from '../store';
 
 // Define a type for the slice state
 interface AuthState {
@@ -23,22 +23,22 @@ export const authSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    testLogin: (state, action: PayloadAction<{ accessToken: string; user: {id: number, email: string}}>) => {
+    onAuthLogin: (state, action: PayloadAction<{ accessToken: string; user: {id: number, email: string}}>) => {
       state.connected = true;
       state.accessToken = action.payload.accessToken;
       state.id = action.payload.user.id;
       state.email = action.payload.user.email;
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    logout: (state) => {
+    onAuthLogout: (state) => {
       state.connected = false;
     },
   },
 });
 
-export const { testLogin, logout } = authSlice.actions
+export const { onAuthLogin, onAuthLogout } = authSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-// export const selectCount = (state: RootState) => state.counter.value
+export const selectAuth = (state: RootState) => state.auth
 
 export default authSlice.reducer

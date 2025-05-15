@@ -1,4 +1,4 @@
-import { useAuthContext } from '@/contexts/auth-context';
+import { useAppSelector } from '@/redux/hooks';
 import { NavLink, Outlet, type NavLinkRenderProps } from 'react-router';
 
 enum LinkVisibility {
@@ -22,7 +22,7 @@ type Link = {
 const getActiveClassNames = ({ isActive }: NavLinkRenderProps) => (isActive ? 'text-red-600' : '');
 
 const Layout = () => {
-  const { connected } = useAuthContext();
+  const { connected } = useAppSelector(state => state.auth);
 
   const links: Link[] = [
     { path: '/', label: 'Home', visibility: LinkVisibility.PUBLIC },

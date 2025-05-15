@@ -5,7 +5,8 @@ import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '../../api/auth';
 import { useNavigate } from 'react-router';
 import { schema } from './schema';
-import { useAuthContext } from '@/contexts/auth-context';
+import { useAppDispatch } from '@/redux/hooks';
+import { onAuthLogin } from '@/redux/slices/authSlice';
 
 type Inputs = z.infer<typeof schema>;
 
@@ -17,13 +18,13 @@ const Register = () => {
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
-  const { loginUser } = useAuthContext();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { isPending, isSuccess, isError, error, mutateAsync } = useMutation({
     mutationFn: registerUser,
     onSuccess: ({ accessToken, user }) => {
-      loginUser(accessToken, user);
+      dispatch(onAuthLogin({ accessToken, user }));
       navigate('/profile');
     },
     onError: () => {

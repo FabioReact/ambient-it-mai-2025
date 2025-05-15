@@ -1,8 +1,8 @@
-import { useAuthContext } from '@/contexts/auth-context';
+import { useAppSelector } from '@/redux/hooks';
 import { Navigate, Outlet, useLocation } from 'react-router';
 
 const PrivateRoute = () => {
-  const { connected } = useAuthContext();
+  const connected = useAppSelector(state => state.auth.connected);
   const location = useLocation();
 
   if (!connected) {

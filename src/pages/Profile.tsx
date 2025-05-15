@@ -1,10 +1,10 @@
 import { useFavoritesContext } from '../contexts/favorites-context';
 import { useCounterContext } from '../contexts/counter-context';
-import { useAuthContext } from '@/contexts/auth-context';
+import { useAppSelector } from '@/redux/hooks';
 
 const Profile = () => {
   const { favorites } = useFavoritesContext();
-  const { email, id, accessToken } = useAuthContext();
+  const { accessToken, id, email } = useAppSelector(state => state.auth);
   const { counter, decrement, increment } = useCounterContext();
   return (
     <section>
