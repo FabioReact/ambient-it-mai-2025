@@ -9,7 +9,17 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), tsconfigPaths()],
+  plugins: [react(), tailwindcss(), tsconfigPaths(),
+    {
+      name: 'ignore-specific-file-reload',
+      handleHotUpdate({ file, server }) {
+        if (file.endsWith('db.json')) {
+          // Prevent full page reload
+          return [];
+        }
+      }
+    }
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
