@@ -1,54 +1,68 @@
-import { useReducer } from "react";
+import { login } from '@/api/auth';
+import { useAuthContext } from '@/contexts/auth-context';
+import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router';
 
-type UserStatusType = {
-    connected: boolean,
-    email: string,
-    accessToken: string|undefined,
-}
-
-type Actions = {
-    type: 'login'
-    payload: {
-        email: string
-    }
-} | {
-    type: 'logout'
-}
-
-const initialState: UserStatusType = {
-    connected: false,
-    email: '',
-    accessToken: undefined,
-}
-
-const reducer = (state: UserStatusType, action: Actions): UserStatusType => {
-  switch (action.type) {
-    case 'login':
-        return {
-            ...state,
-            connected: true,
-            accessToken: 'eyfddfvs.64y5.dfsdv',
-            email: 'user@email.com',
-        }
-    case 'logout':
-        return {
-            ...initialState
-        }
-    default:
-        throw new Error('Invalid type in UserStatusReducer')
-  }
+type Inputs = {
+  email: string;
+  password: string;
 };
 
 const Login = () => {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const location = useLocation();
+  const from = location.state?.from;
+  const navigate = useNavigate();
+  const { loginUser } = useAuthContext();
+
+  const { mutateAsync, isError, error, isPending } = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      loginUser(data.accessToken, data.user);
+      navigate(from || '/', { replace: true });
+    },
+  });
+
+  const onSubmitHandler = (data: Inputs) => {
+    mutateAsync(data);
+  };
   return (
     <section>
       <h1>Login</h1>
-      <pre>{JSON.stringify(state, null, 2)}</pre>
-      <button onClick={() => dispatch({ type: 'login', payload: {
-        email: 'user@email.com' }
-      })}>Connect</button>
-      <button>Logout</button>
+      <form onSubmit={handleSubmit(onSubmitHandler)}>
+        <fieldset>
+          <label htmlFor='email'>Email:</label>
+          <input
+            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            type='email'
+            id='email'
+            placeholder='Email'
+            {...register('email')}
+          />
+          {errors.email && <p>{errors.email.message}</p>}
+        </fieldset>
+
+        <fieldset>
+          <label htmlFor='password'>Password:</label>
+          <input
+            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            type='text'
+            id='password'
+            placeholder='Password'
+            {...register('password')}
+          />
+          {errors.password && <p>{errors.password.message}</p>}
+        </fieldset>
+
+        <button>Login</button>
+        {isError && <p className='text-red-600'>Error: {error.message}</p>}
+        {isPending && <p>Loading...</p>}
+      </form>
     </section>
   );
 };

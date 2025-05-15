@@ -3,39 +3,39 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '../../api/auth';
-// import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { schema } from './schema';
-
-// http://localhost:5173/heroes/4 -> Ajout aux favoris
-// http://localhost:5173/profile -> Voir les favoris
+import { useAuthContext } from '@/contexts/auth-context';
 
 type Inputs = z.infer<typeof schema>;
 
 const Register = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
-//   const navigate = useNavigate();
+  const { loginUser } = useAuthContext();
+  const navigate = useNavigate();
 
-const { isPending, isSuccess, isError, error, mutateAsync } = useMutation({
-  mutationFn: (params: { email: string; password: string }) =>
-    registerUser(params),
-  onSuccess: () => {
-    console.log('Account created !');
-    // navigate('/profile');
-  },
-  onError: () => {
-    console.log('Houston, we have a problem !');
-  },
-});
+  const { isPending, isSuccess, isError, error, mutateAsync } = useMutation({
+    mutationFn: registerUser,
+    onSuccess: ({ accessToken, user }) => {
+      loginUser(accessToken, user);
+      navigate('/profile');
+    },
+    onError: () => {
+      console.log('Houston, we have a problem !');
+    },
+  });
 
   const onSubmitHandler: SubmitHandler<Inputs> = async (data: Inputs) => {
-    console.log(data)
     mutateAsync({
-        email: data.email,
-        password: data.password
+      email: data.email,
+      password: data.password,
     });
-    console.log('Over')
   };
 
   return (

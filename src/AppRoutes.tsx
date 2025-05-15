@@ -9,6 +9,8 @@ import Login from './pages/Login';
 import Register from './pages/Register/Register';
 import Profile from './pages/Profile';
 import Battle from './pages/Battle';
+import PrivateRoute from './hoc/PrivateRoute';
+import Logout from './components/Logout';
 
 const AppRoutes = () => {
   return (
@@ -20,9 +22,12 @@ const AppRoutes = () => {
         <Route path='/useEffect' element={<LearnUseEffect />} />
         <Route path='/counter' element={<Counter />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/logout' element={<Logout />} />
         <Route path='/register' element={<Register />} />
-        <Route path='/profile' element={<Profile />} />
         <Route path='/battle' element={<Battle />} />
+        <Route element={<PrivateRoute />}>
+          <Route path='/profile' element={<Profile />} />
+        </Route>
       </Route>
     </Routes>
   );

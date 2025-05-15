@@ -1,40 +1,57 @@
+import { useAuthContext } from '@/contexts/auth-context';
 import { NavLink, Outlet, type NavLinkRenderProps } from 'react-router';
 
-const getActiveClassNames = ({ isActive }: NavLinkRenderProps) => (isActive ? 'text-red-600' : '')
+enum LinkVisibility {
+  PUBLIC = 'PUBLIC',
+  AUTHENTICATED = 'AUTHENTICATED',
+  NOT_AUTHENTICATED = 'NOT_AUTHENTICATED',
+}
+
+// const LinkVisibility = Object.freeze({
+//   PUBLIC: 'PUBLIC',
+//   AUTHENTICATED: 'AUTHENTICATED',
+//   NOT_AUTHENTICATED: 'NOT_AUTHENTICATED',
+// })
+
+type Link = {
+  path: string;
+  label: string;
+  visibility: LinkVisibility;
+};
+
+const getActiveClassNames = ({ isActive }: NavLinkRenderProps) => (isActive ? 'text-red-600' : '');
 
 const Layout = () => {
+  const { connected } = useAuthContext();
+
+  const links: Link[] = [
+    { path: '/', label: 'Home', visibility: LinkVisibility.PUBLIC },
+    { path: '/heroes', label: 'Heroes', visibility: LinkVisibility.PUBLIC },
+    { path: '/battle', label: 'Battle', visibility: LinkVisibility.PUBLIC },
+    { path: '/login', label: 'Login', visibility: LinkVisibility.NOT_AUTHENTICATED },
+    { path: '/register', label: 'Register', visibility: LinkVisibility.NOT_AUTHENTICATED },
+    { path: '/profile', label: 'Profile', visibility: LinkVisibility.AUTHENTICATED },
+    { path: '/logout', label: 'Logout', visibility: LinkVisibility.AUTHENTICATED },
+  ];
+
   return (
     <>
       <nav>
         <ul className='flex gap-4 justify-center'>
-          <li>
-            <NavLink to='/' className={getActiveClassNames}>Home</NavLink>
-          </li>
-          <li>
-            <NavLink to='/heroes' className={getActiveClassNames}>
-              Heroes
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/login' className={getActiveClassNames}>
-              Login
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/register' className={getActiveClassNames}>
-              Register
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/profile' className={getActiveClassNames}>
-              Profile
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to='/battle' className={getActiveClassNames}>
-              Battle
-            </NavLink>
-          </li>
+          {links
+            .filter(
+              (link) =>
+                link.visibility === LinkVisibility.PUBLIC ||
+                (link.visibility === LinkVisibility.AUTHENTICATED && connected) ||
+                (link.visibility === LinkVisibility.NOT_AUTHENTICATED && !connected),
+            )
+            .map((link) => (
+              <li key={link.path}>
+                <NavLink to={link.path} className={getActiveClassNames}>
+                  {link.label}
+                </NavLink>
+              </li>
+            ))}
         </ul>
       </nav>
       <main>

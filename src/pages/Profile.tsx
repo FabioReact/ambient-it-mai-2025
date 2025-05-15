@@ -1,12 +1,27 @@
 import { useFavoritesContext } from '../contexts/favorites-context';
 import { useCounterContext } from '../contexts/counter-context';
+import { useAuthContext } from '@/contexts/auth-context';
 
 const Profile = () => {
   const { favorites } = useFavoritesContext();
+  const { email, id, accessToken, connected } = useAuthContext();
+  if (!connected) {
+    return (
+      <section>
+        <h1>Profile</h1>
+        <p>Not connected</p>
+      </section>
+    );
+  }
   const { counter, decrement, increment } = useCounterContext();
   return (
     <section>
       <h1>Profile</h1>
+      <div>
+        <p>Email: {email}</p>
+        <p>id: {id}</p>
+        <p>Token: {accessToken}</p>
+      </div>
       <div>
         <p>List of favorites:</p>
         <ul>

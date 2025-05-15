@@ -13,21 +13,23 @@ class Fetcher {
   }
 }
 
-export const registerUser = async ({ email, password }: { email: string, password: string }) => {
-  const response = await fetch('http://localhost:4000/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password }),
-  });
-  return (await response.json()) as { accessToken: string };
+type AuthResponse = {
+  accessToken: string;
+  user: {
+    id: number;
+    email: string;
+  }
 };
 
-export const loginUser = async () => {
-  const response = await Fetcher.post('http://localhost:4000/login', {
-    email: 'user@email.com',
-    password: 'password',
+export const registerUser = async ({ email, password }: { email: string, password: string }): Promise<AuthResponse> => {
+  const response = await axios.post('http://localhost:4000/register', { email, password });
+  return response.data;
+};
+
+export const login = async ({email, password}: { email: string, password: string }): Promise<AuthResponse> => {
+  const response = await Fetcher.post<AuthResponse>('http://localhost:4000/login', {
+    email,
+    password,
   });
   return response;
 };
